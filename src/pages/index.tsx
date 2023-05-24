@@ -87,8 +87,8 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
-            checked={isShowSkillDetail}
-            onChange={() => setIsShowNobleDetail(!isShowSkillDetail)}
+            checked={isShowNobleDetail}
+            onChange={() => setIsShowNobleDetail(!isShowNobleDetail)}
           />
           <label>宝具詳細</label>
         </div>
@@ -193,7 +193,7 @@ const Index = ({ servantData }: Props) => {
                     className="p-2 bg-slate-600 rounded"
                   >
                     {isShowNobleRuby && <p>{noblePhantasm.ruby}</p>}
-                    {isShowNoble && <p>{noblePhantasm.name}</p>}
+                    {isShowNoble && <p>{noblePhantasm.dummyname}</p>}
                     {isShowNobleDetail && (
                       <p className="text-sm">{noblePhantasm.detail}</p>
                     )}

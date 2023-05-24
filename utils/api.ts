@@ -30,6 +30,7 @@ export interface ServantData {
   }[];
   noblePhantasms: {
     name: string;
+    dummyname: string;
     card: string;
     rank: string;
     type: string;
@@ -81,6 +82,7 @@ export async function fetchServantData(): Promise<ServantData[]> {
       noblePhantasms: data.noblePhantasms.map((noblePhantasm: any) => {
         return {
           name: noblePhantasm.name,
+          dummyName: replaceNonSymbols(noblePhantasm.name),
           detail: noblePhantasm.detail,
           card: noblePhantasm.card,
           rank: noblePhantasm.rank,
@@ -93,4 +95,9 @@ export async function fetchServantData(): Promise<ServantData[]> {
   }
 
   return servantData;
+}
+
+function replaceNonSymbols(str: string): string {
+  const regex = /[^A-Za-z0-9\s]/g;
+  return str.replace(regex, "■");
 }
