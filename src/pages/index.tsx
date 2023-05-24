@@ -13,6 +13,8 @@ const Index = ({ servantData }: Props) => {
   const [isShowRare, setIsShowRare] = useState(false);
   const [isShowClass, setIsShowClass] = useState(false);
   const [isShowNoble, setIsShowNoble] = useState(false);
+  const [isShowNobleD, setIsShowNobleD] = useState(false);
+
   const [isShowNobleRank, setIsShowNobleRank] = useState(false);
   const [isShowNobleCard, setIsShowNobleCard] = useState(false);
   const [isShowNobleRuby, setIsShowNobleRuby] = useState(false);
@@ -43,6 +45,14 @@ const Index = ({ servantData }: Props) => {
             onChange={() => setIsShowClass(!isShowClass)}
           />
           <label>クラス</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowNobleD}
+            onChange={() => setIsShowNobleD(!isShowNobleD)}
+          />
+          <label>宝具名ダミー</label>
         </div>
         <div>
           <input
@@ -194,6 +204,9 @@ const Index = ({ servantData }: Props) => {
                   >
                     {isShowNobleRuby && <p>{noblePhantasm.ruby}</p>}
                     {isShowNoble && <p>{noblePhantasm.dummyName}</p>}
+                    {!isShowNoble && isShowNobleD && (
+                      <p>{noblePhantasm.dummyName}</p>
+                    )}
                     {isShowNobleDetail && (
                       <p className="text-sm">{noblePhantasm.detail}</p>
                     )}
