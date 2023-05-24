@@ -203,7 +203,7 @@ const Index = ({ servantData }: Props) => {
                     className="p-2 bg-slate-600 rounded"
                   >
                     {isShowNobleRuby && <p>{noblePhantasm.ruby}</p>}
-                    {isShowNoble && <p>{noblePhantasm.dummyName}</p>}
+                    {isShowNoble && <p>{noblePhantasm.name}</p>}
                     {!isShowNoble && isShowNobleD && (
                       <p>{noblePhantasm.dummyName}</p>
                     )}
