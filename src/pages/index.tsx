@@ -168,7 +168,7 @@ const Index = ({ servantData }: Props) => {
                     className="p-2 bg-slate-800 rounded"
                   >
                     {isShowSkillName && <p>{skill.name}</p>}
-                    {isShowSkillName && (
+                    {isShowSkillDetail && (
                       <p className="text-sm">{skill.detail}</p>
                     )}
                     {isShowSkillIcon && (
