@@ -22,7 +22,7 @@ const Index = ({ servantData }: Props) => {
 
   return (
     <div className="p-4">
-      <div className="flex gap-2">
+      <div className="grid grid-cols-3">
         <div>
           <input
             type="checkbox"
