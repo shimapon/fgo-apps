@@ -12,10 +12,13 @@ const handleReload = () => {
 const Index = ({ servantData }: Props) => {
   const [isShowClass, setIsShowClass] = useState(false);
   const [isShowNoble, setIsShowNoble] = useState(false);
+  const [isShowNobleRank, setIsShowNobleRank] = useState(false);
+  const [isShowNobleCard, setIsShowNobleCard] = useState(false);
   const [isShowNobleRuby, setIsShowNobleRuby] = useState(false);
   const [isShowNobleDetail, setIsShowNobleDetail] = useState(false);
   const [isShowSex, setIsShowSex] = useState(false);
   const [isShowSkillIcon, setIsShowSkillIcon] = useState(false);
+  const [isShowSkillDetail, setIsShowSkillDetail] = useState(false);
   const [isShowSkillName, setIsShowSkillName] = useState(false);
   const [isShowAttr, setIsShowAttr] = useState(false);
   const [isShow, setIsShow] = useState(false);
@@ -42,6 +45,22 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
+            checked={isShowNobleRank}
+            onChange={() => setIsShowNobleRank(!isShowNobleRank)}
+          />
+          <label>宝具ランク</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowNobleCard}
+            onChange={() => setIsShowNobleCard(!isShowNobleCard)}
+          />
+          <label>宝具色</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
             checked={isShowNobleRuby}
             onChange={() => setIsShowNobleRuby(!isShowNobleRuby)}
           />
@@ -50,8 +69,8 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
-            checked={isShowNobleDetail}
-            onChange={() => setIsShowNobleDetail(!isShowNobleDetail)}
+            checked={isShowSkillDetail}
+            onChange={() => setIsShowNobleDetail(!isShowSkillDetail)}
           />
           <label>宝具詳細</label>
         </div>
@@ -78,6 +97,14 @@ const Index = ({ servantData }: Props) => {
             onChange={() => setIsShowSkillName(!isShowSkillName)}
           />
           <label>スキル名</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowSkillName}
+            onChange={() => setIsShowSkillDetail(!isShowSkillName)}
+          />
+          <label>スキル詳細</label>
         </div>
         <div>
           <input
@@ -123,7 +150,9 @@ const Index = ({ servantData }: Props) => {
                     className="p-2 bg-slate-800 rounded"
                   >
                     {isShowSkillName && <p>{skill.name}</p>}
-                    <p className="text-sm">{skill.detail}</p>
+                    {isShowSkillName && (
+                      <p className="text-sm">{skill.detail}</p>
+                    )}
                     {isShowSkillIcon && (
                       <Image
                         src={skill.icon}
@@ -150,9 +179,9 @@ const Index = ({ servantData }: Props) => {
                     {isShowNobleDetail && (
                       <p className="text-sm">{noblePhantasm.detail}</p>
                     )}
-                    <p>ランク：{noblePhantasm.rank}</p>
+                    {isShowNobleRank && <p>ランク：{noblePhantasm.rank}</p>}
                     <p>宝具種別：{noblePhantasm.type}</p>
-                    <p>カード：{noblePhantasm.card}</p>
+                    {isShowNobleCard && <p>カード：{noblePhantasm.card}</p>}
                   </div>
                 );
               })}
