@@ -10,11 +10,13 @@ const handleReload = () => {
 };
 
 const Index = ({ servantData }: Props) => {
+  const [isShowRare, setIsShowRare] = useState(false);
   const [isShowClass, setIsShowClass] = useState(false);
   const [isShowNoble, setIsShowNoble] = useState(false);
   const [isShowNobleRank, setIsShowNobleRank] = useState(false);
   const [isShowNobleCard, setIsShowNobleCard] = useState(false);
   const [isShowNobleRuby, setIsShowNobleRuby] = useState(false);
+  const [isShowNobleType, setIsShowNobleType] = useState(false);
   const [isShowNobleDetail, setIsShowNobleDetail] = useState(false);
   const [isShowSex, setIsShowSex] = useState(false);
   const [isShowSkillIcon, setIsShowSkillIcon] = useState(false);
@@ -26,6 +28,14 @@ const Index = ({ servantData }: Props) => {
   return (
     <div className="p-4">
       <div className="grid grid-cols-3">
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowRare}
+            onChange={() => setIsShowRare(!isShowRare)}
+          />
+          <label>レア</label>
+        </div>
         <div>
           <input
             type="checkbox"
@@ -57,6 +67,14 @@ const Index = ({ servantData }: Props) => {
             onChange={() => setIsShowNobleCard(!isShowNobleCard)}
           />
           <label>宝具色</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowNobleType}
+            onChange={() => setIsShowNobleType(!isShowNobleType)}
+          />
+          <label>宝具種別</label>
         </div>
         <div>
           <input
@@ -101,8 +119,8 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
-            checked={isShowSkillName}
-            onChange={() => setIsShowSkillDetail(!isShowSkillName)}
+            checked={isShowSkillDetail}
+            onChange={() => setIsShowSkillDetail(!isShowSkillDetail)}
           />
           <label>スキル詳細</label>
         </div>
@@ -128,7 +146,7 @@ const Index = ({ servantData }: Props) => {
         return (
           <div key={index} className="py-12 px-6 mt-2 rounded bg-gray-700">
             {isShow && <h2 className="font-bold text-lg">{servant.name}</h2>}{" "}
-            <p>レア：{servant.rarity}</p>
+            <p>レア：{isShowRare && servant.rarity}</p>
             <p>クラス：{isShowClass && servant.className}</p>
             <p>性別：{isShowSex && servant.gender}</p>
             <p>天地人：{isShowAttr && servant.attribute}</p>
@@ -179,9 +197,9 @@ const Index = ({ servantData }: Props) => {
                     {isShowNobleDetail && (
                       <p className="text-sm">{noblePhantasm.detail}</p>
                     )}
-                    {isShowNobleRank && <p>ランク：{noblePhantasm.rank}</p>}
-                    <p>宝具種別：{noblePhantasm.type}</p>
-                    {isShowNobleCard && <p>カード：{noblePhantasm.card}</p>}
+                    <p>ランク：{isShowNobleRank && noblePhantasm.rank}</p>
+                    <p>宝具種別：{isShowNobleType && noblePhantasm.type}</p>
+                    <p>カード：{isShowNobleCard && noblePhantasm.card}</p>
                   </div>
                 );
               })}
