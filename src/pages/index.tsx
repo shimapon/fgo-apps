@@ -27,6 +27,18 @@ const Index = ({ servantData }: Props) => {
 
   return (
     <div className="p-4">
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          checked={isShowRare}
+          onChange={() => setIsShowRare(!isShowRare)}
+          id="myCheckbox"
+          className="w-5 h-5 rounded-sm text-blue-500 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <label htmlFor="myCheckbox" className="text-gray-700">
+          チェックボックス
+        </label>
+      </div>
       <div className="grid grid-cols-3">
         <div>
           <input
@@ -193,7 +205,7 @@ const Index = ({ servantData }: Props) => {
                     className="p-2 bg-slate-600 rounded"
                   >
                     {isShowNobleRuby && <p>{noblePhantasm.ruby}</p>}
-                    {isShowNoble && <p>{noblePhantasm.dummyname}</p>}
+                    {isShowNoble && <p>{noblePhantasm.dummyName}</p>}
                     {isShowNobleDetail && (
                       <p className="text-sm">{noblePhantasm.detail}</p>
                     )}

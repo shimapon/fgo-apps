@@ -30,7 +30,7 @@ export interface ServantData {
   }[];
   noblePhantasms: {
     name: string;
-    dummyname: string;
+    dummyName: string;
     card: string;
     rank: string;
     type: string;
