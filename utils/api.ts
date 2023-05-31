@@ -37,6 +37,11 @@ export interface ServantData {
     ruby: string;
     detail: string;
   }[];
+  classPassives: {
+    name: string;
+    detail: string;
+    icon: string;
+  };
 }
 
 export async function fetchServantData(): Promise<ServantData[]> {
@@ -90,6 +95,13 @@ export async function fetchServantData(): Promise<ServantData[]> {
           ruby: noblePhantasm.ruby,
         };
       }),
+      classPassives: data.classPassive.map((skill: any) => {
+        return {
+          name: skill.name,
+          detail: skill.detail,
+          icon: skill.icon,
+        };
+      }),
     };
     servantData.push(servant);
   }
@@ -98,6 +110,8 @@ export async function fetchServantData(): Promise<ServantData[]> {
 }
 
 function replaceNonSymbols(str: string): string {
-  const regex = /[^A-Za-z0-9\s]/g;
-  return str.replace(regex, "■");
+  const regex = /[^A-Za-z0-9\s・〜]/g;
+  const lastTwoChars = str.slice(-2); // 文字列の後ろから二文字を取得
+  const replacedString = str.slice(0, -2).replace(regex, "■"); // 後ろから二文字以外の部分を置換
+  return replacedString + lastTwoChars; // 置換した部分と後ろ二文字を結合して返す
 }

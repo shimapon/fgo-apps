@@ -13,7 +13,7 @@ const Index = ({ servantData }: Props) => {
   const [isShowRare, setIsShowRare] = useState(false);
   const [isShowClass, setIsShowClass] = useState(false);
   const [isShowNoble, setIsShowNoble] = useState(false);
-  const [isShowNobleD, setIsShowNobleD] = useState(false);
+  const [isShowNobleD, setIsShowNobleD] = useState(true);
 
   const [isShowNobleRank, setIsShowNobleRank] = useState(false);
   const [isShowNobleCard, setIsShowNobleCard] = useState(false);
