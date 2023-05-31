@@ -24,6 +24,7 @@ const Index = ({ servantData }: Props) => {
   const [isShowSkillIconD, setIsShowSkillIconD] = useState(true);
   const [isShowSkillDetail, setIsShowSkillDetail] = useState(false);
   const [isShowSkillName, setIsShowSkillName] = useState(false);
+  const [isShowSkillNameD, setIsShowSkillNameD] = useState(false);
   const [isShowAttr, setIsShowAttr] = useState(false);
   const [isShow, setIsShow] = useState(false);
   const [isShowPassiveName, setIsShowPassiveName] = useState(false);
@@ -31,7 +32,7 @@ const Index = ({ servantData }: Props) => {
   const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(true);
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-gray-100">
       <div className="grid grid-cols-3">
         <div>
           <input
@@ -140,6 +141,14 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
+            checked={isShowSkillNameD}
+            onChange={() => setIsShowSkillNameD(!isShowSkillNameD)}
+          />
+          <label>スキル名1個</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
             checked={isShowSkillDetail}
             onChange={() => setIsShowSkillDetail(!isShowSkillDetail)}
           />
@@ -191,10 +200,10 @@ const Index = ({ servantData }: Props) => {
         return (
           <div key={index} className="py-12 px-6 mt-2 rounded bg-gray-700">
             {isShow && <h2 className="font-bold text-lg">{servant.name}</h2>}{" "}
-            <p>レア：{isShowRare && servant.rarity}</p>
-            <p>クラス：{isShowClass && servant.className}</p>
-            <p>性別：{isShowSex && servant.gender}</p>
-            <p>天地人：{isShowAttr && servant.attribute}</p>
+            {isShowRare && <p>レア：{servant.rarity}</p>}
+            {isShowClass && <p>クラス：{servant.className}</p>}
+            {isShowSex && <p>性別：{servant.gender}</p>}
+            {isShowAttr && <p>天地人：{servant.attribute}</p>}
             {isShow && (
               <div className="flex gap-2 mt-2">
                 {servant.faces.map((face, i) => {
@@ -212,7 +221,10 @@ const Index = ({ servantData }: Props) => {
                     style={{ minWidth: "28%" }}
                     className="p-2 bg-slate-800 rounded"
                   >
-                    {isShowSkillName && <p>{skill.name}</p>}
+                    {(isShowSkillName ||
+                      (isShowSkillNameD && i === servant.isShowSkillName)) && (
+                      <p>{skill.name}</p>
+                    )}
                     {isShowSkillDetail && (
                       <p className="text-sm">{skill.detail}</p>
                     )}
