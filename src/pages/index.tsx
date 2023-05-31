@@ -25,9 +25,9 @@ const Index = ({ servantData }: Props) => {
   const [isShowSkillName, setIsShowSkillName] = useState(false);
   const [isShowAttr, setIsShowAttr] = useState(false);
   const [isShow, setIsShow] = useState(false);
-  const [isShowPassiveName, setIsShowPassiveName] = useState(true);
+  const [isShowPassiveName, setIsShowPassiveName] = useState(false);
   const [isShowPassiveDetail, setIsShowPassiveDetail] = useState(false);
-  const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(false);
+  const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(true);
 
   return (
     <div className="p-4">
