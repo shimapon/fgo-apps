@@ -25,6 +25,9 @@ const Index = ({ servantData }: Props) => {
   const [isShowSkillName, setIsShowSkillName] = useState(false);
   const [isShowAttr, setIsShowAttr] = useState(false);
   const [isShow, setIsShow] = useState(false);
+  const [isShowPassiveName, setIsShowPassiveName] = useState(true);
+  const [isShowPassiveDetail, setIsShowPassiveDetail] = useState(false);
+  const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(false);
 
   return (
     <div className="p-4">
@@ -144,6 +147,30 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
+            checked={isShowPassiveName}
+            onChange={() => setIsShowPassiveName(!isShowPassiveName)}
+          />
+          <label>パッシブスキル名</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowPassiveDetail}
+            onChange={() => setIsShowPassiveDetail(!isShowPassiveDetail)}
+          />
+          <label>パッシブスキル詳細</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
+            checked={isShowPassiveIcon}
+            onChange={() => setIsShowPassiveIcon(!isShowPassiveIcon)}
+          />
+          <label>パッシブスキルアイコン</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
             checked={isShow}
             onChange={() => setIsShow(!isShow)}
           />
@@ -183,6 +210,31 @@ const Index = ({ servantData }: Props) => {
                     {isShowSkillIcon && (
                       <Image
                         src={skill.icon}
+                        key={i}
+                        width={60}
+                        height={60}
+                        alt=""
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-2 mt-2 overflow-x-auto">
+              {servant.classPassives.map((classPassive, i) => {
+                return (
+                  <div
+                    key={i}
+                    style={{ minWidth: "28%" }}
+                    className="p-2 bg-slate-400 rounded"
+                  >
+                    {isShowPassiveName && <p>{classPassive.name}</p>}
+                    {isShowPassiveDetail && (
+                      <p className="text-sm">{classPassive.detail}</p>
+                    )}
+                    {isShowPassiveIcon && (
+                      <Image
+                        src={classPassive.icon}
                         key={i}
                         width={60}
                         height={60}

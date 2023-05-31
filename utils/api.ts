@@ -41,7 +41,7 @@ export interface ServantData {
     name: string;
     detail: string;
     icon: string;
-  };
+  }[];
 }
 
 export async function fetchServantData(): Promise<ServantData[]> {
@@ -114,10 +114,10 @@ function replaceNonSymbols(str: string): string {
 
   var num = 1;
 
-  if (str.length >= 5 && str.length <= 7) {
+  if (str.length >= 6 && str.length <= 8) {
     num = 2;
   }
-  if (str.length > 7) {
+  if (str.length > 8) {
     num = 3;
   }
 
