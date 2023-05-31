@@ -28,6 +28,7 @@ export interface ServantData {
     detail: string;
     icon: string;
   }[];
+  isShowSkill: number;
   noblePhantasms: {
     name: string;
     dummyName: string;
@@ -84,6 +85,7 @@ export async function fetchServantData(): Promise<ServantData[]> {
           detail: skill.detail,
         };
       }),
+      isShowSkill: Math.floor(Math.random() * data.skills.length),
       noblePhantasms: data.noblePhantasms.map((noblePhantasm: any) => {
         return {
           name: noblePhantasm.name,

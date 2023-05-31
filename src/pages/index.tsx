@@ -21,6 +21,7 @@ const Index = ({ servantData }: Props) => {
   const [isShowNobleDetail, setIsShowNobleDetail] = useState(false);
   const [isShowSex, setIsShowSex] = useState(false);
   const [isShowSkillIcon, setIsShowSkillIcon] = useState(false);
+  const [isShowSkillIconD, setIsShowSkillIconD] = useState(true);
   const [isShowSkillDetail, setIsShowSkillDetail] = useState(false);
   const [isShowSkillName, setIsShowSkillName] = useState(false);
   const [isShowAttr, setIsShowAttr] = useState(false);
@@ -123,6 +124,14 @@ const Index = ({ servantData }: Props) => {
         <div>
           <input
             type="checkbox"
+            checked={isShowSkillIconD}
+            onChange={() => setIsShowSkillIconD(!isShowSkillIconD)}
+          />
+          <label>スキルアイコン1枚</label>
+        </div>
+        <div>
+          <input
+            type="checkbox"
             checked={isShowSkillName}
             onChange={() => setIsShowSkillName(!isShowSkillName)}
           />
@@ -207,7 +216,8 @@ const Index = ({ servantData }: Props) => {
                     {isShowSkillDetail && (
                       <p className="text-sm">{skill.detail}</p>
                     )}
-                    {isShowSkillIcon && (
+                    {(isShowSkillIcon ||
+                      (isShowSkillIconD && i === servant.isShowSkill)) && (
                       <Image
                         src={skill.icon}
                         key={i}
