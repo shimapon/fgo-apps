@@ -9,25 +9,6 @@ const handleReload = () => {
   window.location.reload(); // ページのリロード
 };
 
-function RandomSetButton({ stateFunctions }) {
-  const [randomIndex, setRandomIndex] = useState(null);
-
-  const clickRandomSet = () => {
-    const randomIndex = Math.floor(Math.random() * stateFunctions.length);
-    stateFunctions[randomIndex](true);
-    setRandomIndex(randomIndex);
-  };
-
-  return (
-    <div>
-      <button onClick={clickRandomSet}>ランダムに設定</button>
-      {randomIndex !== null && (
-        <p>設定された項目: {stateFunctions[randomIndex].name}</p>
-      )}
-    </div>
-  );
-}
-
 const Index = ({ servantData }: Props) => {
   const [isShowRare, setIsShowRare] = useState(false);
   const [isShowClass, setIsShowClass] = useState(false);
@@ -54,7 +35,6 @@ const Index = ({ servantData }: Props) => {
     setIsShowRare,
     setIsShowClass,
     setIsShowNoble,
-    setIsShowNobleD,
     setIsShowNobleRank,
     setIsShowNobleCard,
     setIsShowNobleRuby,
@@ -62,14 +42,12 @@ const Index = ({ servantData }: Props) => {
     setIsShowNobleDetail,
     setIsShowSex,
     setIsShowSkillIcon,
-    setIsShowSkillIconD,
     setIsShowSkillDetail,
     setIsShowSkillName,
     setIsShowSkillNameD,
     setIsShowAttr,
     setIsShowPassiveName,
     setIsShowPassiveDetail,
-    setIsShowPassiveIcon,
   ];
 
   const [randomIndex, setRandomIndex] = useState(null);
