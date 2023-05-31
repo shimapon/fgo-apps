@@ -116,10 +116,10 @@ function replaceNonSymbols(str: string): string {
 
   var num = 1;
 
-  if (str.length >= 6 && str.length <= 8) {
+  if (str.length >= 7 && str.length <= 9) {
     num = 2;
   }
-  if (str.length > 8) {
+  if (str.length > 9) {
     num = 3;
   }
 
