@@ -111,7 +111,17 @@ export async function fetchServantData(): Promise<ServantData[]> {
 
 function replaceNonSymbols(str: string): string {
   const regex = /[^A-Za-z0-9\s・〜]/g;
-  const lastTwoChars = str.slice(-2); // 文字列の後ろから二文字を取得
-  const replacedString = str.slice(0, -2).replace(regex, "■"); // 後ろから二文字以外の部分を置換
+
+  var num = 1;
+
+  if (str.length >= 5 && str.length <= 7) {
+    num = 2;
+  }
+  if (str.length > 7) {
+    num = 3;
+  }
+
+  const lastTwoChars = str.slice(-num); // 文字列の後ろから二文字を取得
+  const replacedString = str.slice(0, -num).replace(regex, "■"); // 後ろから二文字以外の部分を置換
   return replacedString + lastTwoChars; // 置換した部分と後ろ二文字を結合して返す
 }
