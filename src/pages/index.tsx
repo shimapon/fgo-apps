@@ -1,10 +1,9 @@
-import axios from "axios";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { FiRefreshCw } from "react-icons/fi";
 import { fetchServantData, ServantData } from "../../utils/api";
 import { useState } from "react";
-import { ServantCard } from "./ServantCard";
+import ServantCard from "./ServantCard";
 
 const handleReload = () => {
   window.location.reload(); // ページのリロード

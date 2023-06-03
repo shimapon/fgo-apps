@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ServantData } from "../../../utils/api";
 import Image from "next/image";
-import { type } from "os";
 
 type HiddenType = "ALL" | "PART_A" | "PART_B";
 
@@ -14,7 +13,7 @@ const checkShow = (hiddenType: HiddenType, isShow: boolean) => {
   return hiddenType === "ALL" || isShow;
 };
 
-export const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
+const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
   const [isShowRare, setIsShowRare] = useState(false);
   const [isShowClass, setIsShowClass] = useState(false);
   const [isShowNoble, setIsShowNoble] = useState(false);
@@ -233,3 +232,5 @@ export const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
     </div>
   );
 };
+
+export default ServantCard;
