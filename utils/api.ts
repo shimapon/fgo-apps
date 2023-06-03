@@ -17,10 +17,12 @@ export interface ServantData {
   noblePhantasms: {
     name: string;
     dummyName: string;
+    hiddenName: string;
     card: string;
     rank: string;
     type: string;
     ruby: string;
+    hiddenRuby: string;
     detail: string;
   }[];
   classPassives: {
@@ -28,6 +30,7 @@ export interface ServantData {
     detail: string;
     icon: string;
   }[];
+  hiddenType: "PART_A" | "PART_B" | "PART_C" | "ALL";
 }
 
 export async function fetchServantData(): Promise<ServantData[]> {
@@ -78,11 +81,17 @@ export async function fetchServantData(): Promise<ServantData[]> {
           dummyName: replaceNonSymbols(
             data.noblePhantasms[data.noblePhantasms.length - 1].name
           ),
+          hiddenName: replaceNonAll(
+            data.noblePhantasms[data.noblePhantasms.length - 1].name
+          ),
           detail: data.noblePhantasms[data.noblePhantasms.length - 1].detail,
           card: data.noblePhantasms[data.noblePhantasms.length - 1].card,
           rank: data.noblePhantasms[data.noblePhantasms.length - 1].rank,
           type: data.noblePhantasms[data.noblePhantasms.length - 1].type,
           ruby: data.noblePhantasms[data.noblePhantasms.length - 1].ruby,
+          hiddenRuby: replaceNonAll(
+            data.noblePhantasms[data.noblePhantasms.length - 1].ruby
+          ),
         },
       ],
       classPassives: data.classPassive.map((skill: any) => {
@@ -92,11 +101,20 @@ export async function fetchServantData(): Promise<ServantData[]> {
           icon: skill.icon,
         };
       }),
+      hiddenType: getHiddenType() as "PART_A" | "PART_B" | "PART_C" | "ALL",
     };
+
     servantData.push(servant);
   }
 
   return servantData;
+}
+
+function getHiddenType() {
+  const hiddenTypeOptions = ["PART_A", "PART_B", "PART_C"];
+  const randomHiddenType =
+    hiddenTypeOptions[Math.floor(Math.random() * hiddenTypeOptions.length)];
+  return randomHiddenType;
 }
 
 function replaceNonSymbols(str: string): string {
@@ -114,6 +132,11 @@ function replaceNonSymbols(str: string): string {
   const lastTwoChars = str.slice(-num); // 文字列の後ろから二文字を取得
   const replacedString = str.slice(0, -num).replace(regex, "■"); // 後ろから二文字以外の部分を置換
   return replacedString + lastTwoChars; // 置換した部分と後ろ二文字を結合して返す
+}
+
+function replaceNonAll(str: string): string {
+  const regex = /[^A-Za-z0-9\s・〜]/g;
+  return str.replace(regex, "■");
 }
 
 const クラス名 = (className: string) => {

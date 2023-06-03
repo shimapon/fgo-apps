@@ -8,6 +8,7 @@ const meta: Meta<typeof ServantCard> = {
   component: ServantCard,
   args: {
     servant: {
+      hiddenType: "PART_A",
       name: "長尾景虎",
       rarity: 4,
       className: "ランサー",
@@ -39,12 +40,14 @@ const meta: Meta<typeof ServantCard> = {
         {
           name: "毘天八相車懸りの陣",
           dummyName: "■■■■■■■の陣",
+          hiddenName: "■■■■■■■■■",
           detail:
             "敵単体に超強力な攻撃＆攻撃強化状態を解除＆クリティカル発生率をダウン(3ターン)<オーバーチャージで効果アップ>",
           card: "arts",
           rank: "B",
           type: "対人・対軍宝具",
           ruby: "びてんはっそうくるまがかりのじん",
+          hiddenRuby: "■■■■■■■■■■■■■■■■■■",
         },
       ],
       classPassives: [
