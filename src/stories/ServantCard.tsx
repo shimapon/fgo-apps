@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ServantData } from "../../../utils/api";
+import { ServantData } from "../../utils/api";
 import Image from "next/image";
 
 type HiddenType = "ALL" | "PART_A" | "PART_B";
@@ -89,7 +89,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
         </div>
 
         <div className="justify-self-end">
-          {/* {servant.faces.map((face, i) => {
+          {servant.faces.map((face, i) => {
             return (
               <Image
                 src={
@@ -103,7 +103,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                 alt=""
               />
             );
-          })} */}
+          })}
         </div>
       </div>
       <div className="grid gap-2 mt-4 overflow-x-auto">
