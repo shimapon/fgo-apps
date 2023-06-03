@@ -4,25 +4,9 @@ export interface ServantData {
   name: string;
   rarity: number;
   faces: string[];
-  gender: "male" | "female" | "unknown";
-  className:
-    | "shielder"
-    | "saber"
-    | "archer"
-    | "lancer"
-    | "rider"
-    | "caster"
-    | "assassin"
-    | "berserker"
-    | "ruler"
-    | "alterEgo"
-    | "avenger"
-    | "demonGodPiller"
-    | "moonCancer"
-    | "foreigner"
-    | "pretender"
-    | "beast";
-  attribute: "human" | "earth" | "sky" | "star" | "beast" | "void";
+  gender: string;
+  className: string;
+  attribute: string;
   skills: {
     name: string;
     detail: string;
@@ -49,16 +33,18 @@ export interface ServantData {
 export async function fetchServantData(): Promise<ServantData[]> {
   const servantData: ServantData[] = [];
   const ServerAllCount = 372;
+  const excludedNumbers = [149, 151, 152];
   const randomNumbers: number[] = [];
 
-  // 1からServerAllCountまでのランダムな5つの数字を生成
   while (randomNumbers.length < 5) {
     const randomNumber = Math.floor(Math.random() * ServerAllCount) + 1;
-    if (!randomNumbers.includes(randomNumber)) {
+    if (
+      !randomNumbers.includes(randomNumber) &&
+      !excludedNumbers.includes(randomNumber)
+    ) {
       randomNumbers.push(randomNumber);
     }
   }
-
   // ランダムな5つの数字に対してGETリクエストを実行してデータを取得
   for (const randomNumber of randomNumbers) {
     const response = await axios.get(
@@ -66,19 +52,16 @@ export async function fetchServantData(): Promise<ServantData[]> {
     );
     const data = response.data;
 
+    console.log(data);
+
     // 必要なデータを抽出してservantDataに追加
     const servant: ServantData = {
       name: data.name,
       rarity: data.rarity,
-      className: data.className,
-      faces: [
-        data.extraAssets.faces.ascension["1"],
-        data.extraAssets.faces.ascension["2"],
-        data.extraAssets.faces.ascension["3"],
-        data.extraAssets.faces.ascension["4"],
-      ],
-      gender: data.gender,
-      attribute: data.attribute,
+      className: クラス名(data.className),
+      faces: [data.extraAssets.faces.ascension["1"]],
+      gender: 性別(data.gender),
+      attribute: 天地人(data.attribute),
       skills: data.skills.map((skill: any) => {
         return {
           name: skill.name,
@@ -88,17 +71,19 @@ export async function fetchServantData(): Promise<ServantData[]> {
       }),
       isShowSkill: Math.floor(Math.random() * data.skills.length),
       isShowSkillName: Math.floor(Math.random() * data.skills.length),
-      noblePhantasms: data.noblePhantasms.map((noblePhantasm: any) => {
-        return {
-          name: noblePhantasm.name,
-          dummyName: replaceNonSymbols(noblePhantasm.name),
-          detail: noblePhantasm.detail,
-          card: noblePhantasm.card,
-          rank: noblePhantasm.rank,
-          type: noblePhantasm.type,
-          ruby: noblePhantasm.ruby,
-        };
-      }),
+      noblePhantasms: [
+        {
+          name: data.noblePhantasms[data.noblePhantasms.length - 1].name,
+          dummyName: replaceNonSymbols(
+            data.noblePhantasms[data.noblePhantasms.length - 1].name
+          ),
+          detail: data.noblePhantasms[data.noblePhantasms.length - 1].detail,
+          card: data.noblePhantasms[data.noblePhantasms.length - 1].card,
+          rank: data.noblePhantasms[data.noblePhantasms.length - 1].rank,
+          type: data.noblePhantasms[data.noblePhantasms.length - 1].type,
+          ruby: data.noblePhantasms[data.noblePhantasms.length - 1].ruby,
+        },
+      ],
       classPassives: data.classPassive.map((skill: any) => {
         return {
           name: skill.name,
@@ -129,3 +114,70 @@ function replaceNonSymbols(str: string): string {
   const replacedString = str.slice(0, -num).replace(regex, "■"); // 後ろから二文字以外の部分を置換
   return replacedString + lastTwoChars; // 置換した部分と後ろ二文字を結合して返す
 }
+
+const クラス名 = (className: string) => {
+  switch (className) {
+    case "shielder":
+      return "シールダー";
+    case "saber":
+      return "セイバー";
+    case "archer":
+      return "アーチャー";
+    case "lancer":
+      return "ランサー";
+    case "rider":
+      return "ライダー";
+    case "caster":
+      return "キャスター";
+    case "assassin":
+      return "アサシン";
+    case "berserker":
+      return "バーサーカー";
+    case "ruler":
+      return "ルーラー";
+    case "avenger":
+      return "アヴェンジャー";
+    case "alterEgo":
+      return "アルターエゴ";
+    case "moonCancer":
+      return "ムーンキャンサー";
+    case "foreigner":
+      return "フォーリナー";
+    case "pretender":
+      return "プリテンダー";
+    case "beast":
+      return "ビースト";
+    default:
+      return "その他";
+  }
+};
+
+const 天地人 = (attribute: string) => {
+  switch (attribute) {
+    case "human":
+      return "人";
+    case "earth":
+      return "地";
+    case "sky":
+      return "天";
+    case "star":
+      return "星";
+    case "beast":
+      return "獣";
+    case "void":
+      return "ヴォイド";
+    default:
+      return "その他";
+  }
+};
+
+const 性別 = (gender: string) => {
+  switch (gender) {
+    case "male":
+      return "男性";
+    case "female":
+      return "女性";
+    default:
+      return "不明";
+  }
+};
