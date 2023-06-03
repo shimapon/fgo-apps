@@ -186,7 +186,7 @@ const Index = ({ servantData }: Props) => {
         </div>
       </div> */}
       <h1 className="font-bold">サーヴァント５騎ランダム</h1>
-      <div className="flex gap-2 overflow-x-auto">
+      <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory">
         {servantData.map((servant, index) => {
           return <ServantCard key={index} servant={servant} hiddenType="ALL" />;
         })}

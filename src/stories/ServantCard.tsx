@@ -62,10 +62,14 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
   };
 
   return (
-    <div className="p-6 mt-2 rounded bg-gray-800 font-shippori w-full min-w-full">
+    <div className="p-6 mt-2 rounded bg-gray-800 font-shippori w-full min-w-full snap-center">
       <div className="grid grid-cols-[auto_120px] gap-3">
         <div className="grid grid-rows-[1fr_auto]">
-          <h2 className="font-bold text-xl">
+          <h2
+            className={
+              "font-bold" + (servant.name.length < 7 ? "text-xl" : "text-lg")
+            }
+          >
             {checkShow(hiddenType, isShow) ? servant.name : "サーヴァント名"}
           </h2>
 
