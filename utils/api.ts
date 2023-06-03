@@ -52,14 +52,15 @@ export async function fetchServantData(): Promise<ServantData[]> {
     );
     const data = response.data;
 
-    console.log(data);
-
     // 必要なデータを抽出してservantDataに追加
     const servant: ServantData = {
       name: data.name,
       rarity: data.rarity,
       className: クラス名(data.className),
-      faces: [data.extraAssets.faces.ascension["1"]],
+      faces:
+        data.extraAssets.faces && data.extraAssets.faces.ascension["1"]
+          ? [data.extraAssets.faces.ascension["1"]]
+          : [],
       gender: 性別(data.gender),
       attribute: 天地人(data.attribute),
       skills: data.skills.map((skill: any) => {
