@@ -17,17 +17,20 @@ const meta: Meta<typeof ServantCard> = {
       attribute: "人",
       skills: [
         {
+          num: 1,
           name: "運は天に在り A",
           icon: "https://static.atlasacademy.io/JP/SkillIcons/skill_00305.png",
           detail:
             "自身のArtsカード性能をアップ(1ターン)＆スター集中度をアップ(1ターン)",
         },
         {
+          num: 2,
           name: "鎧は胸に在り A",
           icon: "https://static.atlasacademy.io/JP/SkillIcons/skill_00402.png",
           detail: "自身に回避状態を付与(1ターン)＆NP獲得量をアップ(1ターン)",
         },
         {
+          num: 3,
           name: "手柄は足に在り A",
           icon: "https://static.atlasacademy.io/JP/SkillIcons/skill_00300.png",
           detail:
