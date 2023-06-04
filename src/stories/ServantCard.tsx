@@ -1,6 +1,6 @@
+import Image from "next/image";
 import { useState } from "react";
 import { ServantData } from "../../utils/api";
-import Image from "next/image";
 
 type HiddenType = "PART_A" | "PART_B" | "PART_C" | "ALL";
 
@@ -48,7 +48,6 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
   const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(
     hiddenType === "PART_A"
   );
-
   return (
     <div
       className="p-6 mt-2 rounded bg-gray-800 font-shippori w-11/12 snap-center"
