@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { useState } from "react";
 import { ServantData } from "../../utils/api";
+import Passive from "./Passive";
+import Skill from "./Skill";
 
-type HiddenType = "PART_A" | "PART_B" | "PART_C" | "ALL";
+export type HiddenType = "PART_A" | "PART_B" | "PART_C" | "ALL";
 
 interface Props {
   servant: ServantData;
@@ -21,33 +23,21 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
   const [isShowNobleRank, setIsShowNobleRank] = useState(
     hiddenType === "PART_C"
   );
-  const [isShowNobleCard, setIsShowNobleCard] = useState(false);
+  const [isShowNobleCard, setIsShowNobleCard] = useState(
+    hiddenType === "PART_B"
+  );
   const [isShowNobleRuby, setIsShowNobleRuby] = useState(false);
   const [isShowNobleType, setIsShowNobleType] = useState(
     hiddenType === "PART_A"
   );
   const [isShowNobleDetail, setIsShowNobleDetail] = useState(false);
   const [isShowSex, setIsShowSex] = useState(hiddenType === "PART_A");
-  const [isShowSkillIcon, setIsShowSkillIcon] = useState(false);
-  const [isShowSkillIconD, setIsShowSkillIconD] = useState(
-    hiddenType === "PART_A"
-  );
-  const [isShowSkillDetail, setIsShowSkillDetail] = useState(false);
-  const [isShowSkillName, setIsShowSkillName] = useState(false);
-  const [isShowSkillNameD, setIsShowSkillNameD] = useState(
-    hiddenType === "PART_B"
-  );
   const [isShowAttr, setIsShowAttr] = useState(
     hiddenType === "PART_B" || hiddenType === "PART_C"
   );
   const [isShow, setIsShow] = useState(false);
-  const [isShowPassiveName, setIsShowPassiveName] = useState(false);
-  const [isShowPassiveDetail, setIsShowPassiveDetail] = useState(
-    hiddenType === "PART_C"
-  );
-  const [isShowPassiveIcon, setIsShowPassiveIcon] = useState(
-    hiddenType === "PART_A"
-  );
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
   return (
     <div
       className="p-6 mt-2 rounded bg-gray-800 font-shippori w-11/12 snap-center"
@@ -60,7 +50,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
               "font-bold" + (servant.name.length < 7 ? "text-xl" : "text-base")
             }
           >
-            {checkShow(hiddenType, isShow) ? servant.name : "サーヴァント名"}
+            {checkShow(hiddenType, isShow) ? servant.name : "？？？"}
           </h2>
 
           <div className="gap-1 grid justify-stretch">
@@ -113,18 +103,18 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
         <div className="justify-self-end">
           {servant.faces.map((face, i) => {
             return (
-              <Image
-                src={
-                  checkShow(hiddenType, isShow)
-                    ? face
-                    : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
-                }
-                key={i}
-                width={120}
-                height={120}
-                alt=""
-                onClick={() => setIsShow(true)}
-              />
+              <button key={i} onClick={() => setPopupVisible(true)}>
+                <Image
+                  src={
+                    checkShow(hiddenType, isShow)
+                      ? face
+                      : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
+                  }
+                  width={120}
+                  height={120}
+                  alt=""
+                />
+              </button>
             );
           })}
         </div>
@@ -132,117 +122,27 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
       <div className="grid gap-2 mt-4 overflow-x-auto">
         {servant.skills.map((skill, i) => {
           return (
-            <div key={i} className="p-2 bg-gray-700">
-              <p
-                className={
-                  checkShow(
-                    hiddenType,
-                    isShowSkillName ||
-                      (isShowSkillNameD && i === servant.isShowSkillName) ||
-                      isShow
-                  )
-                    ? ""
-                    : "text-gray-600"
-                }
-                onClick={() => setIsShowSkillName(true)}
-              >
-                {checkShow(
-                  hiddenType,
-                  isShowSkillName ||
-                    (isShowSkillNameD && i === servant.isShowSkillName) ||
-                    isShow
-                )
-                  ? skill.name
-                  : "スキル名"}
-              </p>
-              <div className="grid grid-cols-[60px_auto] gap-2 mt-2">
-                <Image
-                  src={
-                    checkShow(
-                      hiddenType,
-                      isShowSkillIcon ||
-                        (isShowSkillIconD && i === servant.isShowSkill) ||
-                        isShow
-                    )
-                      ? skill.icon
-                      : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
-                  }
-                  key={i}
-                  width={60}
-                  height={60}
-                  alt=""
-                  onClick={() => setIsShowSkillIcon(true)}
-                />
-                <p
-                  className={
-                    "text-sm" +
-                    (checkShow(hiddenType, isShowSkillDetail || isShow)
-                      ? ""
-                      : " text-gray-600")
-                  }
-                  onClick={() => setIsShowSkillDetail(true)}
-                >
-                  {checkShow(hiddenType, isShowSkillDetail || isShow)
-                    ? skill.detail
-                    : "スキル詳細"}
-                </p>
-              </div>
-            </div>
+            <Skill
+              key={i}
+              hiddenType={hiddenType}
+              isShow={isShow}
+              skill={skill}
+              icon={i === servant.isShowSkill && hiddenType === "PART_A"}
+              name={i === servant.isShowSkill && hiddenType === "PART_B"}
+            />
           );
         })}
       </div>
       <div className="flex gap-2 mt-2 overflow-x-auto">
-        {servant.classPassives.map((classPassive, i) => {
+        {servant.classPassives.map((skill, i) => {
           return (
-            <div
+            <Passive
+              hiddenType={hiddenType}
+              isShow={isShow}
+              skill={skill}
               key={i}
-              className="p-2 bg-gray-700"
-              style={{ minWidth: "150px" }}
-            >
-              <p
-                className={
-                  "text-sm" +
-                  (checkShow(hiddenType, isShowPassiveName || isShow)
-                    ? ""
-                    : " text-gray-600")
-                }
-                onClick={() => setIsShowPassiveName(true)}
-              >
-                {checkShow(hiddenType, isShowPassiveName || isShow)
-                  ? classPassive.name
-                  : "スキル名"}
-              </p>
-
-              <div className="grid grid-cols-[40px_auto] gap-2 mt-1">
-                {
-                  <Image
-                    src={
-                      checkShow(hiddenType, isShowPassiveIcon || isShow)
-                        ? classPassive.icon
-                        : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
-                    }
-                    key={i}
-                    width={40}
-                    height={40}
-                    alt=""
-                    onClick={() => setIsShowPassiveIcon(true)}
-                  />
-                }
-                <p
-                  className={
-                    "text-xs" +
-                    (checkShow(hiddenType, isShowPassiveDetail || isShow)
-                      ? ""
-                      : " text-gray-600")
-                  }
-                  onClick={() => setIsShowPassiveDetail(true)}
-                >
-                  {checkShow(hiddenType, isShowPassiveDetail || isShow)
-                    ? classPassive.detail
-                    : "スキル詳細"}
-                </p>
-              </div>
-            </div>
+              icon={hiddenType === "PART_A"}
+            />
           );
         })}
       </div>
@@ -341,6 +241,29 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
           );
         })}
       </div>
+
+      {isPopupVisible && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
+          <div className="bg-gray-800 p-8 rounded text-white">
+            <p>正解を出しますか？</p>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4"
+              onClick={() => {
+                setIsShow(true);
+                setPopupVisible(false);
+              }}
+            >
+              Yes
+            </button>
+            <button
+              className="bg-gray-500 hover:bg-gray-700font-bold py-2 px-4 rounded mt-4 ml-4"
+              onClick={() => setPopupVisible(false)}
+            >
+              No
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

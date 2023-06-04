@@ -8,6 +8,7 @@ export interface ServantData {
   className: string;
   attribute: string;
   skills: {
+    num: number;
     name: string;
     detail: string;
     icon: string;
@@ -66,14 +67,26 @@ export async function fetchServantData(): Promise<ServantData[]> {
           : [],
       gender: 性別(data.gender),
       attribute: 天地人(data.attribute),
-      skills: data.skills.map((skill: any) => {
-        return {
-          name: skill.name,
-          icon: skill.icon,
-          detail: skill.detail,
-        };
-      }),
-      isShowSkill: Math.floor(Math.random() * data.skills.length),
+      skills: data.skills.reduce((acc: any, skill: any) => {
+        const existingSkill = acc.find((s: any) => s.num === skill.num);
+
+        if (existingSkill) {
+          // 既に同じnumを持つスキルが存在する場合、後の要素で優先させる
+          const index = acc.indexOf(existingSkill);
+          acc.splice(index, 1, skill);
+        } else {
+          // numが重複しない場合はそのまま追加
+          acc.push({
+            num: skill.num,
+            name: skill.name,
+            icon: skill.icon,
+            detail: skill.detail,
+          });
+        }
+
+        return acc;
+      }, []),
+      isShowSkill: Math.floor(Math.random() * 3),
       isShowSkillName: Math.floor(Math.random() * data.skills.length),
       noblePhantasms: [
         {
@@ -118,20 +131,30 @@ function getHiddenType() {
 }
 
 function replaceNonSymbols(str: string): string {
-  const regex = /[^A-Za-z0-9\s・〜]/g;
-
-  var num = 1;
-
-  if (str.length >= 7 && str.length <= 9) {
-    num = 2;
-  }
-  if (str.length > 9) {
-    num = 3;
+  // ランダムな位置のインデックスを生成
+  const randomIndex1 = Math.floor(Math.random() * str.length);
+  let randomIndex2 = Math.floor(Math.random() * str.length);
+  while (randomIndex2 === randomIndex1) {
+    randomIndex2 = Math.floor(Math.random() * str.length);
   }
 
-  const lastTwoChars = str.slice(-num); // 文字列の後ろから二文字を取得
-  const replacedString = str.slice(0, -num).replace(regex, "■"); // 後ろから二文字以外の部分を置換
-  return replacedString + lastTwoChars; // 置換した部分と後ろ二文字を結合して返す
+  // 置換後の文字列を生成
+  let replacedText = "";
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    if (
+      i === randomIndex1 ||
+      i === randomIndex2 ||
+      char === "〜" ||
+      char === "・"
+    ) {
+      replacedText += char;
+    } else {
+      replacedText += "■";
+    }
+  }
+
+  return replacedText;
 }
 
 function replaceNonAll(str: string): string {
