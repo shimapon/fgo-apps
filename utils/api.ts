@@ -37,7 +37,7 @@ export interface ServantData {
 
 export async function fetchServantData(): Promise<ServantData[]> {
   const servantData: ServantData[] = [];
-  const ServerAllCount = 372;
+  let ServerAllCount = parseInt(process.env.SERVANT_NUM ?? "5");
   const excludedNumbers = [149, 151, 152];
   const randomNumbers: number[] = [];
 
