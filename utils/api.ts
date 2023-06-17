@@ -147,7 +147,8 @@ function replaceNonSymbols(str: string): string {
       i === randomIndex1 ||
       i === randomIndex2 ||
       char === "〜" ||
-      char === "・"
+      char === "・" ||
+      char === "、"
     ) {
       replacedText += char;
     } else {
@@ -159,7 +160,7 @@ function replaceNonSymbols(str: string): string {
 }
 
 function replaceNonAll(str: string): string {
-  const regex = /[^A-Za-z0-9\s・〜]/g;
+  const regex = /[^A-Za-z0-9\s・〜、]/g;
   return str.replace(regex, "■");
 }
 
