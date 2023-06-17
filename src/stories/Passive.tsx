@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
-import { HiddenType } from "./ServantCard";
+import { HiddenType } from "../../utils/QuizType";
 
 interface Props {
   hiddenType: HiddenType;
