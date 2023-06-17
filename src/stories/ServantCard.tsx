@@ -48,7 +48,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
 
   return (
     <div
-      className="p-6 mt-2 rounded bg-gray-800 font-shippori w-11/12 snap-center"
+      className="p-4 mt-2 rounded bg-gray-800 font-shippori w-11/12 snap-center"
       style={{ minWidth: "310px" }}
     >
       <div className="grid grid-cols-[auto_120px] gap-3">
@@ -111,7 +111,11 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
         <div className="justify-self-end">
           {servant.faces.map((face, i) => {
             return (
-              <button key={i} onClick={() => setPopupVisible(true)}>
+              <button
+                key={i}
+                onClick={() => setPopupVisible(true)}
+                disabled={checkShow(hiddenType, isShow)}
+              >
                 <Image
                   src={
                     checkShow(hiddenType, isShow)
@@ -257,11 +261,11 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
       </div>
 
       {isPopupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75">
-          <div className="bg-gray-800 p-8 rounded text-white">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-75 text-center">
+          <div className="bg-gray-800 py-8 px-12 rounded text-white">
             <p>正解を出しますか？</p>
             <button
-              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded mt-4"
+              className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-6 rounded mt-4"
               onClick={() => {
                 setIsShow(true);
                 setPopupVisible(false);
@@ -270,7 +274,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
               Yes
             </button>
             <button
-              className="bg-gray-500 hover:bg-gray-700font-bold py-2 px-4 rounded mt-4 ml-4"
+              className="bg-gray-500 py-2 px-6 rounded mt-4 ml-8"
               onClick={() => setPopupVisible(false)}
             >
               No
