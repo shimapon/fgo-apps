@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HiddenType, QuizTypeConstants } from "./QuizType";
 
 export interface ServantData {
   name: string;
@@ -31,7 +32,7 @@ export interface ServantData {
     detail: string;
     icon: string;
   }[];
-  hiddenType: "PART_A" | "PART_B" | "PART_C" | "ALL";
+  hiddenType: HiddenType;
 }
 
 export async function fetchServantData(): Promise<ServantData[]> {
@@ -114,7 +115,7 @@ export async function fetchServantData(): Promise<ServantData[]> {
           icon: skill.icon,
         };
       }),
-      hiddenType: getHiddenType() as "PART_A" | "PART_B" | "PART_C" | "ALL",
+      hiddenType: getHiddenType() as HiddenType,
     };
 
     servantData.push(servant);
@@ -124,7 +125,7 @@ export async function fetchServantData(): Promise<ServantData[]> {
 }
 
 function getHiddenType() {
-  const hiddenTypeOptions = ["PART_A", "PART_B", "PART_C"];
+  const hiddenTypeOptions = Object.values(QuizTypeConstants);
   const randomHiddenType =
     hiddenTypeOptions[Math.floor(Math.random() * hiddenTypeOptions.length)];
   return randomHiddenType;

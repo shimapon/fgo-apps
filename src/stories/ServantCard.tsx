@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
+import { HiddenType, QuizTypeConstants } from "../../utils/QuizType";
 import { ServantData } from "../../utils/api";
 import Passive from "./Passive";
 import Skill from "./Skill";
-
-export type HiddenType = "PART_A" | "PART_B" | "PART_C" | "ALL";
 
 interface Props {
   servant: ServantData;
@@ -16,24 +15,33 @@ const checkShow = (hiddenType: HiddenType, isShow: boolean) => {
 };
 
 const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
-  const [isShowRare, setIsShowRare] = useState(hiddenType === "PART_C");
-  const [isShowClass, setIsShowClass] = useState(hiddenType === "PART_B");
+  const [isShowRare, setIsShowRare] = useState(
+    hiddenType === QuizTypeConstants.PART_C
+  );
+  const [isShowClass, setIsShowClass] = useState(
+    hiddenType === QuizTypeConstants.PART_B
+  );
   const [isShowNoble, setIsShowNoble] = useState(false);
-  const [isShowNobleD, setIsShowNobleD] = useState(hiddenType === "PART_C");
+  const [isShowNobleD, setIsShowNobleD] = useState(
+    hiddenType === QuizTypeConstants.PART_C
+  );
   const [isShowNobleRank, setIsShowNobleRank] = useState(
-    hiddenType === "PART_C"
+    hiddenType === QuizTypeConstants.PART_C
   );
   const [isShowNobleCard, setIsShowNobleCard] = useState(
-    hiddenType === "PART_B"
+    hiddenType === QuizTypeConstants.PART_B
   );
   const [isShowNobleRuby, setIsShowNobleRuby] = useState(false);
   const [isShowNobleType, setIsShowNobleType] = useState(
-    hiddenType === "PART_A"
+    hiddenType === QuizTypeConstants.PART_A
   );
   const [isShowNobleDetail, setIsShowNobleDetail] = useState(false);
-  const [isShowSex, setIsShowSex] = useState(hiddenType === "PART_A");
+  const [isShowSex, setIsShowSex] = useState(
+    hiddenType === QuizTypeConstants.PART_A
+  );
   const [isShowAttr, setIsShowAttr] = useState(
-    hiddenType === "PART_B" || hiddenType === "PART_C"
+    hiddenType === QuizTypeConstants.PART_B ||
+      hiddenType === QuizTypeConstants.PART_C
   );
   const [isShow, setIsShow] = useState(false);
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -127,8 +135,14 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
               hiddenType={hiddenType}
               isShow={isShow}
               skill={skill}
-              icon={i === servant.isShowSkill && hiddenType === "PART_A"}
-              name={i === servant.isShowSkill && hiddenType === "PART_B"}
+              icon={
+                i === servant.isShowSkill &&
+                hiddenType === QuizTypeConstants.PART_A
+              }
+              name={
+                i === servant.isShowSkill &&
+                hiddenType === QuizTypeConstants.PART_B
+              }
             />
           );
         })}
@@ -141,7 +155,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
               isShow={isShow}
               skill={skill}
               key={i}
-              icon={hiddenType === "PART_A"}
+              icon={hiddenType === QuizTypeConstants.PART_A}
             />
           );
         })}
