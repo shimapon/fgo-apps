@@ -9,6 +9,8 @@ const Index = ({ servantData }: Props) => {
       <Head>
         <title>Fate Servantクイズ</title>
         <meta property="og:title" content="Fate Servantクイズ" key="title" />
+        <meta name="description" content="サーヴァントを推測しよう！" />
+        <meta name="author" content="shimapon" />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
