@@ -21,14 +21,18 @@ const Skill: React.FC<Props> = ({ hiddenType, isShow, skill, icon, name }) => {
 
   return (
     <div className="p-2 bg-gray-700">
-      <p
+      <button
         className={isShow || isShowName ? "" : "text-gray-600"}
         onClick={() => setIsShowName(true)}
+        disabled={isShow || isShowName}
       >
         {isShow || isShowName ? skill.name : "スキル名"}
-      </p>
+      </button>
       <div className="grid grid-cols-[60px_auto] gap-2 mt-2">
-        <button onClick={() => setIsShowIcon(true)}>
+        <button
+          onClick={() => setIsShowIcon(true)}
+          disabled={isShow || isShowIcon}
+        >
           <Image
             src={
               isShow || isShowIcon
@@ -40,14 +44,15 @@ const Skill: React.FC<Props> = ({ hiddenType, isShow, skill, icon, name }) => {
             alt=""
           />
         </button>
-        <p
+        <button
           className={
             "text-sm" + (isShow || isShowDetail ? "" : " text-gray-600")
           }
           onClick={() => setIsShowDetail(true)}
+          disabled={isShow || isShowDetail}
         >
-          {isShow || isShowDetail ? skill.detail : "スキル詳細"}
-        </p>
+          {isShow || isShowDetail ? skill.detail : "スキル詳細を表示"}
+        </button>
       </div>
     </div>
   );

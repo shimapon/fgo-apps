@@ -20,35 +20,41 @@ const Passive: React.FC<Props> = ({ hiddenType, isShow, skill, icon }) => {
 
   return (
     <div className="p-2 bg-gray-700" style={{ minWidth: "150px" }}>
-      <p
+      <button
         className={"text-sm" + (isShow || isShowName ? "" : " text-gray-600")}
         onClick={() => setIsShowName(true)}
+        disabled={isShow || isShowName}
       >
         {isShow || isShowName ? skill.name : "スキル名"}
-      </p>
+      </button>
 
       <div className="grid grid-cols-[40px_auto] gap-2 mt-1">
         {
-          <Image
-            src={
-              isShow || isShowIcon
-                ? skill.icon
-                : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
-            }
-            width={40}
-            height={40}
-            alt=""
+          <button
             onClick={() => setIsShowIcon(true)}
-          />
+            disabled={isShow || isShowIcon}
+          >
+            <Image
+              src={
+                isShow || isShowIcon
+                  ? skill.icon
+                  : "https://static.atlasacademy.io/JP/SkillIcons/skill_999999.png"
+              }
+              width={40}
+              height={40}
+              alt=""
+            />
+          </button>
         }
-        <p
+        <button
           className={
             "text-xs" + (isShow || isShowDetail ? "" : " text-gray-600")
           }
           onClick={() => setIsShowDetail(true)}
+          disabled={isShow || isShowDetail}
         >
-          {isShow || isShowDetail ? skill.detail : "スキル詳細"}
-        </p>
+          {isShow || isShowDetail ? skill.detail : "スキル詳細を表示"}
+        </button>
       </div>
     </div>
   );

@@ -64,7 +64,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
           <div className="gap-1 grid justify-stretch">
             {/* {checkShow(hiddenType, isShowRare) && <p>レア：{servant.rarity}</p>} */}
 
-            <p
+            <button
               className={
                 "text-center" +
                 (checkShow(hiddenType, isShowClass || isShow)
@@ -72,13 +72,14 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                   : " text-gray-600")
               }
               onClick={() => setIsShowClass(true)}
+              disabled={checkShow(hiddenType, isShowClass || isShow)}
             >
               {checkShow(hiddenType, isShowClass || isShow)
                 ? servant.className
                 : "クラス"}
-            </p>
+            </button>
 
-            <p
+            <button
               className={
                 "text-center border-t-2 border-gray-700" +
                 (checkShow(hiddenType, isShowSex || isShow)
@@ -86,13 +87,14 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                   : " text-gray-600")
               }
               onClick={() => setIsShowSex(true)}
+              disabled={checkShow(hiddenType, isShowSex || isShow)}
             >
               {checkShow(hiddenType, isShowSex || isShow)
                 ? servant.gender
                 : "性別"}
-            </p>
+            </button>
 
-            <p
+            <button
               className={
                 "text-center border-t-2 border-gray-700" +
                 (checkShow(hiddenType, isShowAttr || isShow)
@@ -100,11 +102,12 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                   : " text-gray-600")
               }
               onClick={() => setIsShowAttr(true)}
+              disabled={checkShow(hiddenType, isShowAttr || isShow)}
             >
               {checkShow(hiddenType, isShowAttr || isShow)
                 ? servant.attribute
                 : "天地人"}
-            </p>
+            </button>
           </div>
         </div>
 
@@ -199,7 +202,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                     : noblePhantasm.hiddenName}
                 </p>
               </div>
-              <p
+              <button
                 className={
                   "text-sm my-2" +
                   (checkShow(hiddenType, isShowNobleDetail || isShow)
@@ -209,52 +212,55 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                 onClick={() => {
                   setIsShowNobleDetail(true);
                 }}
+                disabled={checkShow(hiddenType, isShowNobleDetail || isShow)}
               >
                 {checkShow(hiddenType, isShowNobleDetail || isShow)
                   ? noblePhantasm.detail
-                  : "宝具詳細"}
-              </p>
-
-              <p
+                  : "宝具詳細を表示"}
+              </button>
+              <button
                 className={
-                  "text-sm text-end " +
+                  "block text-sm ml-auto mr-0" +
                   (checkShow(hiddenType, isShowNobleRank || isShow)
                     ? ""
                     : " text-gray-600")
                 }
                 onClick={() => setIsShowNobleRank(true)}
+                disabled={checkShow(hiddenType, isShowNobleRank || isShow)}
               >
                 ランク：
                 {checkShow(hiddenType, isShowNobleRank || isShow)
                   ? noblePhantasm.rank
                   : "■"}
-              </p>
-              <p
+              </button>
+              <button
                 className={
-                  "text-sm text-end " +
+                  "block text-sm ml-auto mr-0" +
                   (checkShow(hiddenType, isShowNobleType || isShow)
                     ? ""
                     : " text-gray-600")
                 }
                 onClick={() => setIsShowNobleType(true)}
+                disabled={checkShow(hiddenType, isShowNobleType || isShow)}
               >
                 {checkShow(hiddenType, isShowNobleType || isShow)
                   ? noblePhantasm.type
                   : "宝具種別"}
-              </p>
-              <p
+              </button>
+              <button
                 className={
-                  "text-sm text-end " +
+                  "block text-sm ml-auto mr-0" +
                   (checkShow(hiddenType, isShowNobleCard || isShow)
                     ? ""
                     : " text-gray-600")
                 }
                 onClick={() => setIsShowNobleCard(true)}
+                disabled={checkShow(hiddenType, isShowNobleCard || isShow)}
               >
                 {checkShow(hiddenType, isShowNobleCard || isShow)
                   ? noblePhantasm.card
-                  : "色"}
-              </p>
+                  : "カード色"}
+              </button>
             </div>
           );
         })}
