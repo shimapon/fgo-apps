@@ -3,6 +3,9 @@ import Head from "next/head";
 import { fetchServantData, ServantData } from "../../utils/api";
 import ServantCard from "../stories/ServantCard";
 
+const apiURL = "https://api.atlasacademy.io/rapidoc";
+const githubRepoURL = "https://github.com/shimapon/fgo-apps";
+
 const Index = ({ servantData }: Props) => {
   return (
     <>
@@ -34,7 +37,7 @@ const Index = ({ servantData }: Props) => {
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <div className="p-4 text-gray-100">
-        <h1 className="font-bold">サーヴァント５騎ランダム</h1>
+        <h1 className="font-bold">サーヴァントクイズ：五騎</h1>
         <div className="flex gap-2 overflow-x-auto snap-x snap-mandatory">
           {servantData.map((servant, index) => {
             return (
@@ -45,6 +48,24 @@ const Index = ({ servantData }: Props) => {
               />
             );
           })}
+        </div>
+        <div className="p-6 text-white flex justify-end space-x-4">
+          <a
+            href={apiURL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-yellow-500"
+          >
+            利用API
+          </a>
+          <a
+            href={githubRepoURL}
+            target="_blank"
+            rel="noreferrer"
+            className="underline hover:text-yellow-500"
+          >
+            GitHub Repository
+          </a>
         </div>
       </div>
     </>
