@@ -38,7 +38,7 @@ export interface ServantData {
 export async function fetchServantData(): Promise<ServantData[]> {
   const servantData: ServantData[] = [];
   let ServerAllCount = parseInt(process.env.SERVANT_NUM ?? "5");
-  const excludedNumbers = [149, 151, 152];
+  const excludedNumbers = [149, 151, 152, 168, 240, 333];
   const randomNumbers: number[] = [];
 
   while (randomNumbers.length < 5) {
@@ -50,11 +50,14 @@ export async function fetchServantData(): Promise<ServantData[]> {
       randomNumbers.push(randomNumber);
     }
   }
-  // ランダムな5つの数字に対してGETリクエストを実行してデータを取得
-  for (const randomNumber of randomNumbers) {
-    const response = await axios.get(
-      `https://api.atlasacademy.io/nice/JP/servant/${randomNumber}`
-    );
+
+  const requests = randomNumbers.map((randomNumber) =>
+    axios.get(`https://api.atlasacademy.io/nice/JP/servant/${randomNumber}`)
+  );
+
+  const responses = await Promise.all(requests);
+
+  responses.forEach((response) => {
     const data = response.data;
 
     // 必要なデータを抽出してservantDataに追加
@@ -119,7 +122,7 @@ export async function fetchServantData(): Promise<ServantData[]> {
     };
 
     servantData.push(servant);
-  }
+  });
 
   return servantData;
 }
