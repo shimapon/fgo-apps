@@ -8,19 +8,17 @@ token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
 repo = "shimapon/fgo-apps"
 
-# PRのリード時間を計算
-lead_times = []
-
-# PRの作成者とアプルーバーの数を集計する辞書
-creator_counts = defaultdict(int)
-approver_counts = defaultdict(int)
+# 週ごとのリード時間、PRの数、PRの作成者数、PRのアプルーバー数を集計する辞書
+week_metrics = defaultdict(lambda: {
+    'lead_times': [], 'creators': defaultdict(int), 'approvers': defaultdict(int)
+})
 
 # APIからデータを取得
 page = 1
 pulls = []
 while True:
     response = requests.get(
-        f"https://api.github.com/repos/{repo}/pulls?state=closed&page={page}&per_page=100", 
+        f"https://api.github.com/repos/{repo}/pulls?state=closed&page={page}&per_page=100",
         headers=headers
     )
     data = response.json()
@@ -43,35 +41,41 @@ for pull in pulls:
     # PRのリード時間を計算
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
     lead_time = closed_at - created_at
-    lead_times.append(lead_time.total_seconds() / (60 * 60))  # 時間単位に変換
+    lead_time_hours = lead_time.total_seconds() / (60 * 60)  # 時間単位に変換
 
     # PRの作成者を集計
     creator = pull['user']['login']
-    creator_counts[creator] += 1
 
     # PRのレビューを取得
     pull_number = pull['number']
     response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
     reviews = response.json()
 
+    approvers = []
     for review in reviews:
         # レビューが承認されていれば、アプルーバーを集計
         if review['state'] == 'APPROVED':
             approver = review['user']['login']
-            approver_counts[approver] += 1
+            approvers.append(approver)
 
-# 平均リード時間を計算
-average_lead_time = sum(lead_times) / len(lead_times)
+    # PRを適切な週に割り当て
+    week = (created_at - datetime.now()).days // 7
+    week_metrics[week]['lead_times'].append(lead_time_hours)
+    week_metrics[week]['creators'][creator] += 1
+    for approver in set(approvers):  # 同一PR内での重複アプルーバーを避ける
+        week_metrics[week]['approvers'][approver] += 1
 
 # レポートを作成
 with open('results.txt', 'w') as f:
-    f.write(f"Average lead time: {average_lead_time} hours\n")
-    f.write(f"Number of PRs: {len(lead_times)}\n")  # ここは `pulls` の長さではなく、 `lead_times` の長さを使用
+    for week, metrics in sorted(week_metrics.items()):
+        average_lead_time = sum(metrics['lead_times']) / len(metrics['lead_times'])
+        number_of_prs = len(metrics['lead_times'])
+        number_of_creators = len(metrics['creators'])
+        number_of_approvers = len(metrics['approvers'])
 
-    f.write("\nPR creators:\n")
-    for creator, count in creator_counts.items():
-        f.write(f"{creator}: {count} PRs\n")
-
-    f.write("\nPR approvers:\n")
-    for approver, count in approver_counts.items():
-        f.write(f"{approver}: {count} approvals\n")
+        f.write(f"Week {week}:\n")
+        f.write(f"Average lead time: {average_lead_time} hours\n")
+        f.write(f"Number of PRs: {number_of_prs}\n")
+        f.write(f"Number of creators: {number_of_creators}\n")
+        f.write(f"Number of approvers: {number_of_approvers}\n")
+        f.write("\n")
