@@ -1,0 +1,30 @@
+name: Calculate lead time
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+
+jobs:
+  calculate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run script
+        run: python ./.github/scripts/calculate_lead_time.py
+        env:
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+
+      - name: Upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: lead-time-results
+          path: ./results.txt # Assume your results are saved here
