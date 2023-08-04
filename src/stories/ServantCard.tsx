@@ -15,9 +15,6 @@ const checkShow = (hiddenType: HiddenType, isShow: boolean) => {
 };
 
 const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
-  const [isShowRare, setIsShowRare] = useState(
-    hiddenType === QuizTypeConstants.PART_C
-  );
   const [isShowClass, setIsShowClass] = useState(
     hiddenType === QuizTypeConstants.PART_B
   );
