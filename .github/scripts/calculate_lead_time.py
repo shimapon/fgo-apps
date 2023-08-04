@@ -53,7 +53,21 @@ for pull in pulls:
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
     lead_time = count_weekdays(created_at, closed_at) * 24  # 平日のみを考慮して時間単位に変換
 
-    # (省略)
+    # PRの作成者を集計
+    creator = pull['user']['login']
+    creator_counts[creator] += 1
+
+    # PRのレビューを取得
+    pull_number = pull['number']
+    response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
+    reviews = response.json()
+
+    for review in reviews:
+        # レビューが承認されていれば、アプルーバーを集計
+        if review['state'] == 'APPROVED':
+            approver = review['user']['login']
+            approver_counts[approver] += 1
+
 
     # どの週に該当するデータなのかを計算
     week_number = (datetime.now() - closed_at).days // 7
