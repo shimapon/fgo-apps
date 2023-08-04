@@ -3,14 +3,17 @@ import requests
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-def count_weekdays(start, end):
-    total = 0
+def count_weekday_hours(start, end):
+    total_hours = 0
     current = start
     while current < end:
         if current.weekday() < 5:  # 0-4 denotes Monday to Friday
-            total += 1
+            if current.date() != end.date(): 
+                total_hours += 24 - current.hour  # if not the end date, count full remaining hours of the day
+            else:
+                total_hours += end.hour - current.hour
         current += timedelta(days=1)
-    return total
+    return total_hours
 
 # GitHubのtokenとリポジトリ情報を設定
 token = os.getenv('MY_GITHUB_TOKEN')
@@ -51,7 +54,7 @@ for pull in pulls:
 
     # PRのリード時間を計算
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
-    lead_time = count_weekdays(created_at, closed_at) * 24  # 平日のみを考慮して時間単位に変換
+    lead_time = count_weekday_hours(created_at, closed_at)  # 平日の時間を計算
 
     # PRの作成者を集計
     creator = pull['user']['login']
