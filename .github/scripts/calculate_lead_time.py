@@ -61,21 +61,20 @@ for pull in pulls:
     response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
     reviews = response.json()
 
+    # approverをリセット
+    approver = None
     for review in reviews:
-        # レビューが承認されていれば、アプルーバーを集計
+        # レビューが承認されていれば、アプルーバーを更新
         if review['state'] == 'APPROVED':
             approver = review['user']['login']
-            approver_counts[approver] += 1
-
-
     # どの週に該当するデータなのかを計算
     week_number = (datetime.now() - closed_at).days // 7
 
     # 週ごとのデータを集計
     weekly_data[week_number]['lead_times'].append(lead_time)
     weekly_data[week_number]['creator_counts'][creator] += 1
-    weekly_data[week_number]['approver_counts'][approver] += 1
-
+    if approver:  # アプルーバーがいる場合だけカウント
+        weekly_data[week_number]['approver_counts'][approver] += 1
 # レポートを作成
 with open('results.txt', 'w') as f:
     for week_number, data in sorted(weekly_data.items()):
