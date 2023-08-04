@@ -80,30 +80,27 @@ for pull in pulls:
     weekly_data[week_number]['creator_counts'][creator] += 1
     if approver:  # アプルーバーがいる場合だけカウント
         weekly_data[week_number]['approver_counts'][approver] += 1
-        
-all_data = []
-for week_number, data in sorted(weekly_data.items()):
-    start_date = datetime.now() - timedelta(days=(week_number+1)*7)
-    end_date = datetime.now() - timedelta(days=week_number*7)
-    week_range = f"Week from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
-    
-    avg_lead_time = sum(data['lead_times']) / len(data['lead_times'])
-    num_prs = len(data['lead_times'])
-    creators = "\n".join([f"{creator}: {count} PRs" for creator, count in data['creator_counts'].items()])
-    approvers = "\n".join([f"{approver}: {count} approvals" for approver, count in data['approver_counts'].items()])
-    
-    # データをリストに追加
-    all_data.append({
-        'Week Range': week_range,
-        'Average Lead Time (hours)': avg_lead_time,
-        'Number of PRs': num_prs,
-        'PR Creators': creators,
-        'PR Approvers': approvers
-    })
 
-# 全データをDataFrameに変換
-df = pd.DataFrame(all_data)
-
-# DataFrameをHTMLに変換して書き込み
+# レポートを作成
 with open('results.html', 'w') as f:
-    f.write(df.to_html(index=False))
+    for week_number, data in sorted(weekly_data.items()):
+        start_date = datetime.now() - timedelta(days=(week_number+1)*7)
+        end_date = datetime.now() - timedelta(days=week_number*7)
+        week_range = f"Week from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}"
+        
+        avg_lead_time = sum(data['lead_times']) / len(data['lead_times'])
+        num_prs = len(data['lead_times'])
+        creators = "\n".join([f"{creator}: {count} PRs" for creator, count in data['creator_counts'].items()])
+        approvers = "\n".join([f"{approver}: {count} approvals" for approver, count in data['approver_counts'].items()])
+        
+        # DataFrameを作成
+        df = pd.DataFrame({
+            'Week Range': [week_range],
+            'Average Lead Time (hours)': [avg_lead_time],
+            'Number of PRs': [num_prs],
+            'PR Creators': [creators],
+            'PR Approvers': [approvers]
+        })
+        
+        # DataFrameをHTMLに変換して書き込み
+        f.write(df.to_html(index=False))
