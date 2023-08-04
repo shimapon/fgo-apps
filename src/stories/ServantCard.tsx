@@ -216,7 +216,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
               >
                 {checkShow(hiddenType, isShowNobleDetail || isShow)
                   ? noblePhantasm.detail
-                  : "宝具詳細を表示"}
+                  : "宝具詳細を表示する"}
               </button>
               <button
                 className={
