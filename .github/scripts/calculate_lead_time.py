@@ -20,6 +20,10 @@ response = requests.get(f"https://api.github.com/repos/{repo}/pulls?state=closed
 pulls = response.json()
 
 for pull in pulls:
+    # 'base'ブランチが'develop'でなければスキップ
+    if pull['base']['ref'] != 'develop':
+        continue
+        
     # PRのリード時間を計算
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
     closed_at = datetime.strptime(pull['closed_at'], '%Y-%m-%dT%H:%M:%SZ')
