@@ -20,16 +20,16 @@ def count_weekday_hours(start, end):
 
 def generate_mock_data():  # Step 2: Define function to generate mock data
     mock_data = []
-    for _ in range(100):  # Generate 100 mock pull requests
+    for _ in range(10):  # Generate 100 mock pull requests
         created_at = datetime.now() - timedelta(days=random.randint(0, 90))
-        closed_at = created_at + timedelta(hours=random.randint(1, 100))
+        closed_at = created_at + timedelta(hours=random.randint(1, 10))
         user = f"user_{random.randint(1, 10)}"
         mock_data.append({
             'created_at': created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'closed_at': closed_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
             'user': {'login': user},
             'base': {'ref': 'develop'},
-            'number': random.randint(1, 100),
+            'number': random.randint(1, 10),
             'reviews': [{'state': 'APPROVED', 'user': {'login': f"approver_{random.randint(1, 5)}"}}]
         })
     return mock_data
