@@ -3,6 +3,7 @@ import requests
 from collections import defaultdict
 from datetime import datetime, timedelta
 import pandas as pd
+import random  # Step 1: Import random module
 
 def count_weekday_hours(start, end):
     total_hours = 0
@@ -17,6 +18,23 @@ def count_weekday_hours(start, end):
     return total_hours
 
 
+def generate_mock_data():  # Step 2: Define function to generate mock data
+    mock_data = []
+    for _ in range(100):  # Generate 100 mock pull requests
+        created_at = datetime.now() - timedelta(days=random.randint(0, 90))
+        closed_at = created_at + timedelta(hours=random.randint(1, 100))
+        user = f"user_{random.randint(1, 10)}"
+        mock_data.append({
+            'created_at': created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'closed_at': closed_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'user': {'login': user},
+            'base': {'ref': 'develop'},
+            'number': random.randint(1, 100),
+            'reviews': [{'state': 'APPROVED', 'user': {'login': f"approver_{random.randint(1, 5)}"}}]
+        })
+    return mock_data
+
+
 # GitHubのtokenとリポジトリ情報を設定
 token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
@@ -29,15 +47,26 @@ weekly_data = defaultdict(lambda: {
     'approver_counts': defaultdict(int),
 })
 
+# # APIからデータを取得
+# page = 1
+# pulls = []
+# while True:
+#     response = requests.get(
+#         f"https://api.github.com/repos/{repo}/pulls?state=closed&page={page}&per_page=100", 
+#         headers=headers
+#     )
+#     data = response.json()
+#     if not data:
+#         break
+#     pulls.extend(data)
+#     page += 1
+
 # APIからデータを取得
 page = 1
 pulls = []
 while True:
-    response = requests.get(
-        f"https://api.github.com/repos/{repo}/pulls?state=closed&page={page}&per_page=100", 
-        headers=headers
-    )
-    data = response.json()
+    # 本番データをAPIから取得する代わりに、モックデータを生成する
+    data = generate_mock_data()
     if not data:
         break
     pulls.extend(data)
