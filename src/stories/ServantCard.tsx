@@ -228,7 +228,7 @@ const ServantCard: React.FC<Props> = ({ servant, hiddenType }) => {
                 onClick={() => setIsShowNobleRank(true)}
                 disabled={checkShow(hiddenType, isShowNobleRank || isShow)}
               >
-                ランク：
+                rank：
                 {checkShow(hiddenType, isShowNobleRank || isShow)
                   ? noblePhantasm.rank
                   : "■"}
