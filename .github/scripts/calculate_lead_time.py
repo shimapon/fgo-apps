@@ -55,7 +55,6 @@ for pull in pulls:
 
     # PRの作成者を集計
     creator = pull['user']['login']
-    creator_counts[creator] += 1
 
     # PRのレビューを取得
     pull_number = pull['number']
