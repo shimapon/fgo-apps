@@ -2,6 +2,7 @@ name: Calculate lead time
 on:
   schedule:
     - cron: "0 9 * * 1"
+  workflow_dispatch: # この行を追加
 
 jobs:
   calculate:
