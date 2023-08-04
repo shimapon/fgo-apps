@@ -19,6 +19,9 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
+      - name: Install pandas
+        run: pip install pandas
+
       - name: Run script
         run: python ./.github/scripts/calculate_lead_time.py
         env:
