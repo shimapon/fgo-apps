@@ -20,5 +20,10 @@ for pull in pulls:
     lead_times.append(lead_time.total_seconds() / (60 * 60 * 24))  # 日単位に変換
 
 # 平均リード時間を計算
-average_lead_time = sum(lead_times) / len(lead_times)
-print(f"Average lead time: {average_lead_time} days")
+if lead_times:
+    average_lead_time = sum(lead_times) / len(lead_times)
+    with open('results.txt', 'w') as f:
+        f.write(f"Average lead time: {average_lead_time} days\n")
+else:
+    with open('results.txt', 'w') as f:
+        f.write("No closed PRs found.\n")
