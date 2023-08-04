@@ -31,4 +31,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: lead-time-results
-          path: ./results.txt # Assume your results are saved here
+          path: ./results.html
