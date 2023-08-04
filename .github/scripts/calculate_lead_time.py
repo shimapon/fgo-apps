@@ -3,6 +3,15 @@ import requests
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+def count_weekdays(start, end):
+    total = 0
+    current = start
+    while current < end:
+        if current.weekday() < 5:  # 0-4 denotes Monday to Friday
+            total += 1
+        current += timedelta(days=1)
+    return total
+
 # GitHubのtokenとリポジトリ情報を設定
 token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
@@ -42,23 +51,9 @@ for pull in pulls:
 
     # PRのリード時間を計算
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
-    lead_time = closed_at - created_at
-    lead_times.append(lead_time.total_seconds() / (60 * 60))  # 時間単位に変換
+    lead_time = count_weekdays(created_at, closed_at) * 24  # 平日のみを考慮して時間単位に変換
 
-    # PRの作成者を集計
-    creator = pull['user']['login']
-    creator_counts[creator] += 1
-
-    # PRのレビューを取得
-    pull_number = pull['number']
-    response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
-    reviews = response.json()
-
-    for review in reviews:
-        # レビューが承認されていれば、アプルーバーを集計
-        if review['state'] == 'APPROVED':
-            approver = review['user']['login']
-            approver_counts[approver] += 1
+    # (省略)
 
     # どの週に該当するデータなのかを計算
     week_number = (datetime.now() - closed_at).days // 7
