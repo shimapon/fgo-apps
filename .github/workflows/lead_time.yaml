@@ -34,4 +34,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: results
-          path: ./results.html
+          path: |
+            ./results.html
+            ./weekly_averages.png
