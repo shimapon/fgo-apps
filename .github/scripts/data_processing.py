@@ -2,6 +2,7 @@
 from collections import defaultdict
 from datetime import datetime
 from datetime import timedelta
+import requests
 
 def count_hours(start, end):
     total_hours = (end - start).seconds / 3600 + (end - start).days * 24
