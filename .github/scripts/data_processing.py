@@ -1,5 +1,6 @@
 
 from collections import defaultdict
+from datetime import datetime
 from datetime import timedelta
 
 def count_hours(start, end):
@@ -10,6 +11,9 @@ def count_hours(start, end):
 def week_ending_date(date):
     return date + timedelta(days=(6-date.weekday()))
 
+def fetch_reviews(pull_number, repo, headers):
+    response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
+    return response.json()
 
 def process_pull_data(pull, daily_data, weekly_data, repo, headers):
     if pull['base']['ref'] != 'develop':
