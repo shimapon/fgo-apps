@@ -12,6 +12,8 @@ def week_ending_date(date):
     # Returns the ending date (Sunday) for the week in which the given date falls.
     return date + timedelta(days=(6-date.weekday()))
 
+start_date = datetime(2023, 7, 1).date()
+
 token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
 repo = "shimapon/fgo-apps"
@@ -44,8 +46,6 @@ for pull in pulls:
     if pull['base']['ref'] != 'develop':
         continue
     closed_at = datetime.strptime(pull['closed_at'], '%Y-%m-%dT%H:%M:%SZ')
-    if closed_at < datetime.now() - timedelta(days=90):
-        continue
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
     
     pull_number = pull['number']
@@ -75,8 +75,10 @@ for pull in pulls:
     weekly_data[week_end]['Number of PRs'] += 1
 
 all_daily_data = []
-for day, data in sorted(daily_data.items()):
-    day_string = day.strftime('%Y-%m-%d')
+current_date = start_date
+while current_date <= datetime.now().date():
+    data = daily_data[current_date]
+    day_string = current_date.strftime('%Y-%m-%d')
     avg_open_to_merge = sum(data['Open to Merge']) / len(data['Open to Merge']) if data['Open to Merge'] else 0
     avg_open_to_review = sum(data['Open to Review Start']) / len(data['Open to Review Start']) if data['Open to Review Start'] else 0
     avg_review_to_merge = sum(data['Review Start to Merge']) / len(data['Review Start to Merge']) if data['Review Start to Merge'] else 0
@@ -89,9 +91,13 @@ for day, data in sorted(daily_data.items()):
         'Number of PRs': data['Number of PRs']
     })
 
+    current_date += timedelta(days=1)
+
 all_weekly_data = []
-for week_end, data in sorted(weekly_data.items()):
-    week_string = week_end.strftime('%Y-%m-%d')
+current_week_end = week_ending_date(start_date)
+while current_week_end <= datetime.now().date():
+    data = weekly_data[current_week_end]
+    week_string = current_week_end.strftime('%Y-%m-%d')
     avg_open_to_merge = sum(data['Open to Merge']) / len(data['Open to Merge']) if data['Open to Merge'] else 0
     avg_open_to_review = sum(data['Open to Review Start']) / len(data['Open to Review Start']) if data['Open to Review Start'] else 0
     avg_review_to_merge = sum(data['Review Start to Merge']) / len(data['Review Start to Merge']) if data['Review Start to Merge'] else 0
@@ -103,6 +109,8 @@ for week_end, data in sorted(weekly_data.items()):
         'Review Start to Merge': avg_review_to_merge,
         'Number of PRs': data['Number of PRs']
     })
+
+    current_week_end += timedelta(days=7)
 
 # Writing to HTML
 df_daily = pd.DataFrame(all_daily_data)
