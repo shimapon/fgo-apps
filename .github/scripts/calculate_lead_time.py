@@ -5,16 +5,18 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 def count_hours(start, end):
-    return (end - start).total_seconds() / 3600  # Convert total seconds to hours
+    total_hours = (end - start).seconds / 3600 + (end - start).days * 24
+    return total_hours
 
 token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
 repo = "shimapon/fgo-apps"
 
-hourly_data = defaultdict(lambda: {
-    'lead_times': [],
-    'creator_counts': defaultdict(int),
-    'approver_counts': defaultdict(int),
+daily_data = defaultdict(lambda: {
+    'creation_to_merge': [],
+    'creation_to_review': [],
+    'review_to_close': [],
+    'num_prs': 0
 })
 
 page = 1
@@ -34,40 +36,38 @@ for pull in pulls:
     if closed_at < datetime.now() - timedelta(days=90):
         continue
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
-    lead_time = count_hours(created_at, closed_at)
-    creator = pull['user']['login']
+    
     pull_number = pull['number']
     response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
     reviews = response.json()
 
-    approver = None
+    first_review_time = None
     for review in reviews:
-        if review['state'] == 'APPROVED':
-            approver = review['user']['login']
+        if review['state'] in ['APPROVED', 'CHANGES_REQUESTED']:
+            first_review_time = datetime.strptime(review['submitted_at'], '%Y-%m-%dT%H:%M:%SZ')
+            break
     
-    # 時間毎の計算
-    hour_number = int((datetime.now() - closed_at).total_seconds() // 3600)
-    hourly_data[hour_number]['lead_times'].append(lead_time)
-    hourly_data[hour_number]['creator_counts'][creator] += 1
-    if approver:
-        hourly_data[hour_number]['approver_counts'][approver] += 1
-        
+    if first_review_time:
+        daily_data[closed_at.date()]['creation_to_review'].append(count_hours(created_at, first_review_time))
+        daily_data[closed_at.date()]['review_to_close'].append(count_hours(first_review_time, closed_at))
+    daily_data[closed_at.date()]['creation_to_merge'].append(count_hours(created_at, closed_at))
+    daily_data[closed_at.date()]['num_prs'] += 1
+
 all_data = []
-for hour_number, data in sorted(hourly_data.items()):
-    the_hour = datetime.now() - timedelta(hours=hour_number)
-    hour_string = the_hour.strftime('%Y-%m-%d %H:00')
-    avg_lead_time = sum(data['lead_times']) / len(data['lead_times'])
-    num_prs = len(data['lead_times'])
-    creators = "\n".join([f"{creator}: {count} PRs" for creator, count in data['creator_counts'].items()])
-    approvers = "\n".join([f"{approver}: {count} approvals" for approver, count in data['approver_counts'].items()])
+for the_date, data in sorted(daily_data.items()):
+    day_string = the_date.strftime('%Y-%m-%d')
+    avg_creation_to_merge = sum(data['creation_to_merge']) / len(data['creation_to_merge']) if data['creation_to_merge'] else 0
+    avg_creation_to_review = sum(data['creation_to_review']) / len(data['creation_to_review']) if data['creation_to_review'] else 0
+    avg_review_to_close = sum(data['review_to_close']) / len(data['review_to_close']) if data['review_to_close'] else 0
+    
     all_data.append({
-        'Hour': hour_string,
-        'Average Lead Time (hours)': avg_lead_time,
-        'Number of PRs': num_prs,
-        'PR Creators': creators,
-        'PR Approvers': approvers
+        'Date': day_string,
+        'Average Time Open to Merge (hours)': avg_creation_to_merge,
+        'Average Time Creation to Review (hours)': avg_creation_to_review,
+        'Average Time Review to Close (hours)': avg_review_to_close,
+        'Number of PRs Created': data['num_prs']
     })
 
 df = pd.DataFrame(all_data)
-with open('results.html', 'w') as f:
+with open('daily_results.html', 'w') as f:
     f.write(df.to_html(index=False))
