@@ -23,7 +23,7 @@ jobs:
         run: pip install pandas
 
       - name: Run script
-        run: python ./.github/scripts/calculate_lead_time.py
+        run: python ./.github/scripts/main.py
         env:
           MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
