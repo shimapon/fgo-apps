@@ -4,23 +4,14 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 import pandas as pd
 
-def count_weekday_hours(start, end):
-    total_hours = 0
-    current = start
-    while current < end:
-        if current.weekday() < 5:  # 0-4 denotes Monday to Friday
-            if current.date() == end.date():
-                total_hours += (end - current).seconds / 3600
-            else:
-                total_hours += 24
-        current += timedelta(days=1)
-    return total_hours
+def count_hours(start, end):
+    return (end - start).total_seconds() / 3600  # Convert total seconds to hours
 
 token = os.getenv('MY_GITHUB_TOKEN')
 headers = {'Authorization': f'token {token}'}
 repo = "shimapon/fgo-apps"
 
-daily_data = defaultdict(lambda: {
+hourly_data = defaultdict(lambda: {
     'lead_times': [],
     'creator_counts': defaultdict(int),
     'approver_counts': defaultdict(int),
@@ -43,7 +34,7 @@ for pull in pulls:
     if closed_at < datetime.now() - timedelta(days=90):
         continue
     created_at = datetime.strptime(pull['created_at'], '%Y-%m-%dT%H:%M:%SZ')
-    lead_time = count_weekday_hours(created_at, closed_at)
+    lead_time = count_hours(created_at, closed_at)
     creator = pull['user']['login']
     pull_number = pull['number']
     response = requests.get(f"https://api.github.com/repos/{repo}/pulls/{pull_number}/reviews", headers=headers)
@@ -54,23 +45,23 @@ for pull in pulls:
         if review['state'] == 'APPROVED':
             approver = review['user']['login']
     
-    # 日ごとの計算
-    day_number = (datetime.now() - closed_at).days
-    daily_data[day_number]['lead_times'].append(lead_time)
-    daily_data[day_number]['creator_counts'][creator] += 1
+    # 時間毎の計算
+    hour_number = int((datetime.now() - closed_at).total_seconds() // 3600)
+    hourly_data[hour_number]['lead_times'].append(lead_time)
+    hourly_data[hour_number]['creator_counts'][creator] += 1
     if approver:
-        daily_data[day_number]['approver_counts'][approver] += 1
+        hourly_data[hour_number]['approver_counts'][approver] += 1
         
 all_data = []
-for day_number, data in sorted(daily_data.items()):
-    the_date = datetime.now() - timedelta(days=day_number)
-    day_string = the_date.strftime('%Y-%m-%d')
+for hour_number, data in sorted(hourly_data.items()):
+    the_hour = datetime.now() - timedelta(hours=hour_number)
+    hour_string = the_hour.strftime('%Y-%m-%d %H:00')
     avg_lead_time = sum(data['lead_times']) / len(data['lead_times'])
     num_prs = len(data['lead_times'])
     creators = "\n".join([f"{creator}: {count} PRs" for creator, count in data['creator_counts'].items()])
     approvers = "\n".join([f"{approver}: {count} approvals" for approver, count in data['approver_counts'].items()])
     all_data.append({
-        'Date': day_string,
+        'Hour': hour_string,
         'Average Lead Time (hours)': avg_lead_time,
         'Number of PRs': num_prs,
         'PR Creators': creators,
