@@ -10,7 +10,7 @@ if __name__ == "__main__":
     token = os.getenv('MY_GITHUB_TOKEN')
     headers = {'Authorization': f'token {token}'}
     repo = "shimapon/fgo-apps"
-    pulls = fetch_pulls(repo, headers)
+    pulls = github_api.fetch_pulls(repo, headers)
 
     daily_data = defaultdict(lambda: {
         'Open to Merge': [],
@@ -31,9 +31,9 @@ if __name__ == "__main__":
     })
 
     for pull in pulls:
-        process_pull_data(pull, daily_data, weekly_data, repo, headers)
+        data_processing.process_pull_data(pull, daily_data, weekly_data, repo, headers)
 
-    all_daily_data = [get_data_row(data, key) for key, data in daily_data.items()]
-    all_weekly_data = [get_data_row(data, key, is_daily=False) for key, data in weekly_data.items()]
+    all_daily_data = [data_processing.get_data_row(data, key) for key, data in daily_data.items()]
+    all_weekly_data = [data_processing.get_data_row(data, key, is_daily=False) for key, data in weekly_data.items()]
 
-    write_to_html(all_daily_data, all_weekly_data)
+    output.write_to_html(all_daily_data, all_weekly_data)
