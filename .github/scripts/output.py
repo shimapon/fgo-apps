@@ -20,7 +20,7 @@ def create_weekly_graph(df):
     plt.legend()
 
     # 画像として保存
-    img_path = os.path.join(os.getcwd(), 'weekly_averages.png')
+    img_path = 'weekly_averages.png'  # 直接ファイル名を指定して相対パスを作成
     plt.savefig(img_path)
     plt.close()
 
