@@ -13,10 +13,10 @@ headers = {'Authorization': f'token {token}'}
 repo = "shimapon/fgo-apps"
 
 daily_data = defaultdict(lambda: {
-    'creation_to_merge': [],
-    'creation_to_review': [],
-    'review_to_close': [],
-    'num_prs': 0
+    'Open to Merge': [],
+    'Open to Review Start': [],
+    'Review Start to Merge': [],
+    'Number of PRs': 0
 })
 
 page = 1
@@ -48,24 +48,24 @@ for pull in pulls:
             break
     
     if first_review_time:
-        daily_data[closed_at.date()]['creation_to_review'].append(count_hours(created_at, first_review_time))
-        daily_data[closed_at.date()]['review_to_close'].append(count_hours(first_review_time, closed_at))
-    daily_data[closed_at.date()]['creation_to_merge'].append(count_hours(created_at, closed_at))
-    daily_data[closed_at.date()]['num_prs'] += 1
+        daily_data[closed_at.date()]['Open to Review Start'].append(count_hours(created_at, first_review_time))
+        daily_data[closed_at.date()]['Review Start to Merge'].append(count_hours(first_review_time, closed_at))
+    daily_data[closed_at.date()]['Open to Merge'].append(count_hours(created_at, closed_at))
+    daily_data[closed_at.date()]['Number of PRs'] += 1
 
 all_data = []
 for the_date, data in sorted(daily_data.items()):
     day_string = the_date.strftime('%Y-%m-%d')
-    avg_creation_to_merge = sum(data['creation_to_merge']) / len(data['creation_to_merge']) if data['creation_to_merge'] else 0
-    avg_creation_to_review = sum(data['creation_to_review']) / len(data['creation_to_review']) if data['creation_to_review'] else 0
-    avg_review_to_close = sum(data['review_to_close']) / len(data['review_to_close']) if data['review_to_close'] else 0
+    avg_open_to_merge = sum(data['Open to Merge']) / len(data['Open to Merge']) if data['Open to Merge'] else 0
+    avg_open_to_review = sum(data['Open to Review Start']) / len(data['Open to Review Start']) if data['Open to Review Start'] else 0
+    avg_review_to_merge = sum(data['Review Start to Merge']) / len(data['Review Start to Merge']) if data['Review Start to Merge'] else 0
     
     all_data.append({
         'Date': day_string,
-        'Average Time Open to Merge (hours)': avg_creation_to_merge,
-        'Average Time Creation to Review (hours)': avg_creation_to_review,
-        'Average Time Review to Close (hours)': avg_review_to_close,
-        'Number of PRs Created': data['num_prs']
+        'Open to Merge': avg_open_to_merge,
+        'Open to Review Start': avg_open_to_review,
+        'Review Start to Merge': avg_review_to_merge,
+        'Number of PRs': data['Number of PRs']
     })
 
 df = pd.DataFrame(all_data)
