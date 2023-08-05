@@ -9,7 +9,7 @@ if __name__ == "__main__":
     start_date = datetime(2023, 7, 1).date()
     token = os.getenv('MY_GITHUB_TOKEN')
     headers = {'Authorization': f'token {token}'}
-    repo = "shimapon/fgo-apps"
+    repo = "useName/repo"
     pulls = github_api.fetch_pulls(repo, headers)
 
     daily_data = defaultdict(lambda: {
