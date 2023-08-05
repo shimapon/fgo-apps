@@ -26,7 +26,7 @@ const Skill: React.FC<Props> = ({ hiddenType, isShow, skill, icon, name }) => {
         onClick={() => setIsShowName(true)}
         disabled={isShow || isShowName}
       >
-        {isShow || isShowName ? skill.name : "スキル名"}
+        {isShow || isShowName ? skill.name : "skill名"}
       </button>
       <div className="grid grid-cols-[60px_auto] gap-2 mt-2">
         <button
